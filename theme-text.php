@@ -47,7 +47,7 @@ echo $nieuwsbrief_text;
 
 echo "\n*Kalender*\n";
 foreach (get_agenda_items($theme_options['theme_agenda_items']) as $agenda_item) {
-        echo $agenda_item['date'] . "\n" . $agenda_item['title'] . "\n" . $agenda_item['link'] . "\n\n";
+        echo str_replace('â','-',$agenda_item['date']) . "\n" . str_replace('â','-',$agenda_item['title']) . "\n" . $agenda_item['link'] . "\n\n";
 }
 ?>
 *Nieuwsbrief info*

@@ -57,3 +57,17 @@ function convert_html_text($text) {
 
     return $text;
 }
+
+function get_newsletter_item_icon($postid) {
+  ob_start();
+  newsletter_get_post_image($postid);
+  $thumbnail = trim(ob_get_contents());
+  ob_end_clean();
+  return $thumbnail;
+/*
+                              if ($thumbnail != '') { ?>
+                                        <img width="125" src="<?php echo $thumbnail; ?>" class="icon" alt="icon">
+                                 <?php }
+                                } ?>
+*/
+}

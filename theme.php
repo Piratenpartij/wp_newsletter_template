@@ -49,20 +49,23 @@ require_once('theme-functions.inc.php');
                 color: #000;
             }
 
-            table.nieuwsbrief a {
+            table.nieuwsbrief a, a {
                 color: #572b85;
                 text-decoration: none;
             }
 
-            table.nieuwsbrief a:hover {
+            table.nieuwsbrief a:hover, a:hover {
                 text-decoration: underline;
             }
 
-            table.nieuwsbrief h1 {
+            table.nieuwsbrief h1, h1 {
                 color: #572b85;
             }
+            table.nieuwsbrief h2, h2 {
+                color: #7c5ba8;
+            }
 
-            table.nieuwsbrief img.icon {
+            table.nieuwsbrief img.icon, img.icon {
               padding-top: 20px;
             }
         </style>
@@ -70,7 +73,7 @@ require_once('theme-functions.inc.php');
     <body>
         <table align="center" width="700px" border="0" class="nieuwsbrief">
             <tr>
-                <td colspan="2" align="center" style="padding-top: 20px;">
+                <td align="center" style="padding-top: 20px;">
                 <?php if (!empty($theme_options['theme_header_logo']['url'])) { ?>
                     <img title="<?php echo $theme_options['main_header_title'] ?>" alt="<?php echo $theme_options['main_header_title'] ?>" src="<?php echo $theme_options['theme_header_logo']['url'] ?>" />
                 <?php } elseif (!empty($theme_options['main_header_logo']['url'])) { ?>
@@ -90,7 +93,7 @@ require_once('theme-functions.inc.php');
             </tr>
 
             <tr>
-                <td colspan="2">
+                <td>
                     <h1><?php echo $theme_options['theme_title']; ?></h1>
                     <p><?php echo $theme_options['theme_introduction_text']; ?></p>
                     <strong>In deze nieuwsbrief:</strong><br />
@@ -105,42 +108,54 @@ require_once('theme-functions.inc.php');
                     </ul>
                 </td>
             </tr>
-            <?php if (!empty($posts)) { 
+	   <tr>
+             <td style="padding: 0px">
+               <table>
+            <?php if (!empty($posts)) {
                 foreach ($posts as $post) { ?>
-
                     <tr>
+			<?php if ($theme_options['theme_thumbnails_location'] == 'l') { ?>
+                          <td valign="top">
+                            <?php if ( ($thumbnail = get_newsletter_item_icon($post->ID)) != '') { ?>
+				<img width="125" src="<?php echo $thumbnail; ?>" class="icon" alt="icon">
+                            <?php } ?>
+                          </td>
+                        <?php } ?>
                         <td valign="top">
-                            <?php if (isset($theme_options['theme_thumbnails'])) { 
-				ob_start();
-				newsletter_get_post_image($post->ID);
-				$thumbnail = trim(ob_get_contents());
-				ob_end_clean();
-				if ($thumbnail != '') { ?>
-                                	<img width="125" src="<?php echo $thumbnail; ?>" class="icon" alt="icon">
-                           	 <?php }
-				} ?>
+				<a name="<?php echo $post->post_name ?>"></a><h1><?php echo $post->post_title; ?></h1>
+                                <p><?php echo $post->post_content; ?></p>
                         </td>
-                        <td valign="top">
-                            <a name="<?php echo $post->post_name ?>"></a><h1><?php echo $post->post_title; ?></h1>
-                            <p><?php echo $post->post_content; ?></p>
-                        </td>
+                        <?php if ($theme_options['theme_thumbnails_location'] == 'r') { ?>
+                          <td valign="top">
+                            <?php if ( ($thumbnail = get_newsletter_item_icon($post->ID)) != '') { ?>
+                                <img width="125" src="<?php echo $thumbnail; ?>" class="icon" alt="icon">
+                            <?php } ?>
+                          </td>
+                        <?php } ?>
                     </tr>
 
                 <?php } ?>
             <?php } ?>
-
             <tr>
+		<?php if ($theme_options['theme_thumbnails_location'] == 'l') { ?>
                 <td valign="top"><img src="https://piratenpartij.nl/wp-content/uploads/2014/04/Google_Calendar23.png" class="icon" width="125"></td>
+		<?php } ?>
                 <td valign="top"><a name="kalender"></a>
                     <h1>Kalender</h1>
                     <?php
 			foreach (get_agenda_items($theme_options['theme_agenda_items']) as $agenda_item) {
-			    echo '<a href="' . $agenda_item['link'] . '" target="_blank" title="' . $agenda_item['title'] . '">' . $agenda_item['date'] . '<br />' . $agenda_item['title'] . '</a><br /><br />';
+			    echo '<a href="' . $agenda_item['link'] . '" target="_blank" title="' . str_replace('â','-',$agenda_item['title']) . '">' . str_replace('â','-',$agenda_item['date']) . '<br />' . str_replace('â','-',$agenda_item['title']) . '</a><br /><br />';
 			}?>
                 </td>
+                <?php if ($theme_options['theme_thumbnails_location'] == 'r') { ?>
+                <td valign="top"><img src="https://piratenpartij.nl/wp-content/uploads/2014/04/Google_Calendar23.png" class="icon" width="125"></td>
+                <?php } ?>
             </tr>
+           </table>
+         </td>
+         </tr>
             <tr>
-                <td colspan="2" valign="top">
+                <td valign="top">
                     <a name="nbinfo"></a><h1>Nieuwsbrief info</h1>
                     <p>Heb je zaken voor in de nieuwsbrief, agenda-items, heb je vragen, wil je helpen of een oproep doen? Mail naar <a href="mailto:nieuwsbrief@piratenpartij.nl">nieuwsbrief@piratenpartij.nl</a></p>
                     <p>Deze nieuwsbrief wordt opgemaakt in html. Voor een archief met verzonden nieuwsbrieven of als deze nieuwsbrief niet correct wordt weergegeven per e-mail kun je terecht op de website: <a href="https://piratenpartij.nl/nieuwsbrief" title="Piratenpartij Nederland nieuwsbrief archief">Piratenpartij Nieuwsbrief</a></p>

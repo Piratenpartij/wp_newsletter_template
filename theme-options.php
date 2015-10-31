@@ -12,10 +12,18 @@
             <?php $controls->wp_editor('theme_introduction_text'); ?>
         </td>
     </tr>
+<!--
     <tr>
-        <th>Posts</th>
+        <th>Thumbnails</th>
         <td>
             <?php $controls->checkbox('theme_thumbnails', 'Add post thumbnails'); ?>
+        </td>
+    </tr>
+-->
+  <tr>
+        <th>Lokatie Thumbnails</th>
+        <td>
+            <?php $controls->select('theme_thumbnails_location', array('n' => 'Geen','l' => 'Links' , 'r' => 'Rechts')); ?>
         </td>
     </tr>
     <tr>
