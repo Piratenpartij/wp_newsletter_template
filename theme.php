@@ -21,6 +21,8 @@ $filters['post_type'] = 'newsletter_item';
 $filters['order'] = 'ASC';
 $posts = get_posts($filters);
 
+$preview_modus = stripos($_SERVER['REQUEST_URI'],'preview.php') !== false;
+
 require_once('theme-functions.inc.php');
 
 ?><!DOCTYPE html>
@@ -123,7 +125,10 @@ require_once('theme-functions.inc.php');
                         <?php } ?>
                         <td valign="top">
 				<a name="<?php echo $post->post_name ?>"></a><h1><?php echo $post->post_title; ?></h1>
-                                <p><?php echo $post->post_content; ?></p>
+				<?php if ($preview_modus) {
+					echo '<a href="/wp-admin/post.php?post=' . $post->ID . '&action=edit" target="_blank">Bewerken in nieuw venster</a>';
+				} ?>
+                                <p><?php echo nl2br($post->post_content); ?></p>
                         </td>
                         <?php if ($theme_options['theme_thumbnails_location'] == 'r') { ?>
                           <td valign="top">
@@ -143,8 +148,9 @@ require_once('theme-functions.inc.php');
                 <td valign="top"><a name="kalender"></a>
                     <h1>Kalender</h1>
                     <?php
-			foreach (get_agenda_items($theme_options['theme_agenda_items']) as $agenda_item) {
-			    echo '<a href="' . $agenda_item['link'] . '" target="_blank" title="' . str_replace('â','-',$agenda_item['title']) . '">' . str_replace('â','-',$agenda_item['date']) . '<br />' . str_replace('â','-',$agenda_item['title']) . '</a><br /><br />';
+			foreach (get_agenda_items() as $agenda_item) {
+			    if (!in_array($agenda_item['id'],$theme_options['theme_agenda_items'])) continue;
+			    echo '<a href="' . $agenda_item['link'] . '" target="_blank" title="' . $agenda_item['title'] . '">' . $agenda_item['date'] . '<br />' . $agenda_item['title'] . '</a><br /><br />';
 			}?>
                 </td>
                 <?php if ($theme_options['theme_thumbnails_location'] == 'r') { ?>
