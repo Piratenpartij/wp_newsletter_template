@@ -1,10 +1,30 @@
 <?php
+setlocale(LC_ALL, 'nl_NL');
 
 function clear_agenda_text($string) {
   $string = trim($string);
   $string = str_replace(array('â'),'-',$string);
 
   return $string;
+}
+
+function make_agenda_timestamp($string) {
+  $months = array('dummy','jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec');
+  $date = explode('@',$string);
+  $day = explode(' ',trim($date[0]));
+  $time = explode(' ',trim($date[1]));
+  $time = explode(':',trim($time[0]));
+
+  if (count($time) != 2) {
+    $time  = array(0,0);
+  }
+
+  $date = mktime($time[0],$time[1],0,array_search($day[0],$months),$day[1]);
+
+  if ($date < time()) {
+    $date = mktime($time[0],$time[1],0,array_search($day[0],$months),$day[1],date('Y')+1);
+  }
+  return $date;
 }
 
 function get_agenda_items($amount = 50) {
@@ -15,7 +35,7 @@ function get_agenda_items($amount = 50) {
 
 	$agenda_list = array();
 	foreach ($agenda_items as $agenda_item) {
-		$agenda_list_item = array('title' => '', 'description' =>'', 'date' => '', 'link' => '' , 'id' => -1);
+		$agenda_list_item = array('title' => '', 'description' =>'', 'date' => '', 'link' => '' , 'id' => -1, 'timestamp' => 0);
 
 		$agenda_parts = $xpath->query(".//span[@class='ai1ec-event-title']",$agenda_item);
 		foreach ($agenda_parts as $agenda_part) {
@@ -30,6 +50,7 @@ function get_agenda_items($amount = 50) {
 		$agenda_parts = $xpath->query(".//div[@class='ai1ec-event-time']",$agenda_item);
 		foreach ($agenda_parts as $agenda_part) {
 			$agenda_list_item['date'] = clear_agenda_text($agenda_part->nodeValue);
+			$agenda_list_item['timestamp'] = make_agenda_timestamp($agenda_list_item['date']);
 		}
 
 		$agenda_parts = $xpath->query(".//div[@class='ai1ec-btn-group ai1ec-actions']/a",$agenda_item);

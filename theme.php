@@ -147,11 +147,13 @@ require_once('theme-functions.inc.php');
 		<?php } ?>
                 <td valign="top"><a name="kalender"></a>
                     <h1>Kalender</h1>
+		    <table>
                     <?php
 			foreach (get_agenda_items() as $agenda_item) {
 			    if (!in_array($agenda_item['id'],$theme_options['theme_agenda_items'])) continue;
-			    echo '<a href="' . $agenda_item['link'] . '" target="_blank" title="' . $agenda_item['title'] . '">' . $agenda_item['date'] . '<br />' . $agenda_item['title'] . '</a><br /><br />';
+			    echo '<tr><td style="white-space: nowrap"><strong>' . strtolower(date('j F Y, H:i',$agenda_item['timestamp'])) . '</strong></td><td><a href="' . $agenda_item['link'] . '" target="_blank" title="' . $agenda_item['title'] . '">' . $agenda_item['title'] . '</a></td></tr>';
 			}?>
+		    </table>
                 </td>
                 <?php if ($theme_options['theme_thumbnails_location'] == 'r') { ?>
                 <td valign="top"><img src="https://piratenpartij.nl/wp-content/uploads/2014/04/Google_Calendar23.png" class="icon" width="125"></td>

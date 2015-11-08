@@ -48,7 +48,7 @@ echo $nieuwsbrief_text;
 echo "\n*Kalender*\n";
 foreach (get_agenda_items() as $agenda_item) {
   if (!in_array($agenda_item['id'],$theme_options['theme_agenda_items'])) continue;
-  echo $agenda_item['date'] . "\n" . $agenda_item['title'] . "\n" . $agenda_item['link'] . "\n\n";
+  echo strtolower(date('j F Y, H:i',$agenda_item['timestamp'])) . " - " . $agenda_item['title'] . "\n" . $agenda_item['link'] . "\n\n";
 }
 ?>
 *Nieuwsbrief info*
