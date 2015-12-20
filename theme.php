@@ -104,8 +104,10 @@ require_once('theme-functions.inc.php');
                             foreach ($posts as $post) {
                                 echo '<li><a href="#' . $post->post_name . '" title="' . $post->post_title . '">' . $post->post_title . '</a></li>';
                             }
-                        }?>
-                        <li><a href="#kalender" title="Kalender">Kalender</a></li>
+                        }
+			if (count($theme_options['theme_blog_items']) > 0) echo '<li><a href="#blogposts" title="Recente blogposts">Recente blogposts</a></li>';
+			if (count($theme_options['theme_agenda_items']) > 0) echo '<li><a href="#kalender" title="Kalender">Kalender</a></li>';
+			?>
                         <li><a href="#nbinfo" title="Nieuwsbrief info">Nieuwsbrief info</a></li>
                     </ul>
                 </td>
@@ -128,7 +130,13 @@ require_once('theme-functions.inc.php');
 				<?php if ($preview_modus) {
 					echo '<a href="/wp-admin/post.php?post=' . $post->ID . '&action=edit" target="_blank">Bewerken in nieuw venster</a>';
 				} ?>
-                                <p><?php echo nl2br($post->post_content); ?></p>
+                                <p>
+<?php
+// Remove extra enters between HTML tags
+$re = "/(ul|li)>\\s*<br \\/>\\s*\\</";
+$subst = "$1><";
+echo preg_replace($re, $subst, nl2br($post->post_content));
+?></p>
                         </td>
                         <?php if ($theme_options['theme_thumbnails_location'] == 'r') { ?>
                           <td valign="top">
@@ -141,6 +149,27 @@ require_once('theme-functions.inc.php');
 
                 <?php } ?>
             <?php } ?>
+
+	<?php if (count($theme_options['theme_blog_items']) > 0) { ?>
+	    <tr>
+                <?php if ($theme_options['theme_thumbnails_location'] == 'l') { ?>
+                <td valign="top"><img src="https://https://piratenpartij.nl/wp-content/uploads/2015/12/blogposts.png" class="icon" width="125"></td>
+                <?php } ?>
+                <td valign="top"><a name="blogposts"></a>
+                    <h1>Recente blogposts</h1>
+                    <?php
+                        foreach (get_blog_items() as $blog_item) {
+                            if (!in_array($blog_item['id'],$theme_options['theme_blog_items'])) continue;
+			    echo '<strong><a href="' . $blog_item['link'] . '" target="_blank" title="' . $blog_item['title'] . '">' . $blog_item['title'] . '</a></strong><br />Geschreven door: ' . $blog_item['author'] . ' op ' . strtolower(date('j F Y',$blog_item['timestamp'])) . '<br /><br />';
+                        }?>
+                </td>
+                <?php if ($theme_options['theme_thumbnails_location'] == 'r') { ?>
+                <td valign="top"><img src="https://piratenpartij.nl/wp-content/uploads/2015/12/blogposts.png" class="icon" width="125"></td>
+                <?php } ?>
+            </tr>
+	<?php } ?>
+
+	<?php if (count($theme_options['theme_agenda_items']) > 0) { ?>
             <tr>
 		<?php if ($theme_options['theme_thumbnails_location'] == 'l') { ?>
                 <td valign="top"><img src="https://piratenpartij.nl/wp-content/uploads/2014/04/Google_Calendar23.png" class="icon" width="125"></td>
@@ -159,6 +188,8 @@ require_once('theme-functions.inc.php');
                 <td valign="top"><img src="https://piratenpartij.nl/wp-content/uploads/2014/04/Google_Calendar23.png" class="icon" width="125"></td>
                 <?php } ?>
             </tr>
+	<?php } ?>
+
            </table>
          </td>
          </tr>

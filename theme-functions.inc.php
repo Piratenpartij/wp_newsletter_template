@@ -65,6 +65,18 @@ function get_agenda_items($amount = 50) {
 	return $agenda_list;
 }
 
+function get_blog_items($amount = 50) {
+    $post_list = [];
+
+    $filters = array();
+    $filters['showposts'] = $amount;
+    $posts = get_posts($filters);
+    foreach($posts as $post) {
+	$post_list[] = array('id' => $post->ID, 'timestamp' => strtotime($post->post_date) ,'title' => $post->post_title, 'link' => get_permalink($post->ID),'date' => $post->post_date , 'author' => get_the_author_meta('display_name', $post->post_author ));
+    }
+    return $post_list;
+}
+
 function convert_html_text($text) {
     $doc = new DOMDocument();
     $doc->loadHTML($text);

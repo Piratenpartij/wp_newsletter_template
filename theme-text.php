@@ -26,7 +26,8 @@ if (!empty($posts)) {
 	}
 }
 
-echo " * Kalender\n";
+if (count($theme_options['theme_blog_items']) > 0) echo " * Recente blogposts\n";
+if (count($theme_options['theme_agenda_items']) echo " * Kalender\n";
 echo " * Nieuwsbrief info\n";
 
 if (!empty($posts)) {
@@ -45,10 +46,20 @@ $nieuwsbrief_text = preg_replace("/^ ([^*])/m","$1", $nieuwsbrief_text);
 
 echo $nieuwsbrief_text;
 
-echo "\n*Kalender*\n";
-foreach (get_agenda_items() as $agenda_item) {
-  if (!in_array($agenda_item['id'],$theme_options['theme_agenda_items'])) continue;
-  echo strtolower(date('j F Y, H:i',$agenda_item['timestamp'])) . " - " . $agenda_item['title'] . "\n" . $agenda_item['link'] . "\n\n";
+if (count($theme_options['theme_blog_items']) > 0) {
+  echo "\n*Recente blogposts*\n";
+  foreach (get_blog_items() as $blog_item) {
+    if (!in_array($blog_item['id'],$theme_options['theme_blog_items'])) continue;
+    echo $blog_item['title'] . "\n" . 'Geschreven door: ' . $blog_item['author'] . ' op ' . strtolower(date('j F Y',$blog_item['timestamp'])) . "\n" . $blog_item['link'] . "\n\n";
+  }
+}
+
+if (count($theme_options['theme_agenda_items']) > 0) {
+  echo "\n*Kalender*\n";
+  foreach (get_agenda_items() as $agenda_item) {
+    if (!in_array($agenda_item['id'],$theme_options['theme_agenda_items'])) continue;
+    echo strtolower(date('j F Y, H:i',$agenda_item['timestamp'])) . " - " . $agenda_item['title'] . "\n" . $agenda_item['link'] . "\n\n";
+  }
 }
 ?>
 *Nieuwsbrief info*
