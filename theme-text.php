@@ -27,7 +27,7 @@ if (!empty($posts)) {
 }
 
 if (count($theme_options['theme_blog_items']) > 0) echo " * Recente blogposts\n";
-if (count($theme_options['theme_agenda_items']) echo " * Kalender\n";
+if (count($theme_options['theme_agenda_items']) > 0) echo " * Kalender\n";
 echo " * Nieuwsbrief info\n";
 
 if (!empty($posts)) {

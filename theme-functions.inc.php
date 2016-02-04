@@ -1,5 +1,5 @@
 <?php
-setlocale(LC_ALL, 'nl_NL');
+setlocale(LC_ALL, 'nl_NL', 'nl_NL.utf8');
 
 function clear_agenda_text($string) {
   $string = trim($string);
@@ -9,7 +9,7 @@ function clear_agenda_text($string) {
 }
 
 function make_agenda_timestamp($string) {
-  $months = array('dummy','jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec');
+  $months = array('dummy','jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec');
   $date = explode('@',$string);
   $day = explode(' ',trim($date[0]));
   $time = explode(' ',trim($date[1]));
@@ -19,7 +19,7 @@ function make_agenda_timestamp($string) {
     $time  = array(0,0);
   }
 
-  $date = mktime($time[0],$time[1],0,array_search($day[0],$months),$day[1]);
+  $date = mktime($time[0],$time[1],0,array_search(strtolower($day[0]),$months),$day[1]);
 
   if ($date < time()) {
     $date = mktime($time[0],$time[1],0,array_search($day[0],$months),$day[1],date('Y')+1);
@@ -49,8 +49,7 @@ function get_agenda_items($amount = 50) {
 
 		$agenda_parts = $xpath->query(".//div[@class='ai1ec-event-time']",$agenda_item);
 		foreach ($agenda_parts as $agenda_part) {
-			$agenda_list_item['date'] = clear_agenda_text($agenda_part->nodeValue);
-			$agenda_list_item['timestamp'] = make_agenda_timestamp($agenda_list_item['date']);
+			$agenda_list_item['timestamp'] = make_agenda_timestamp(clear_agenda_text($agenda_part->nodeValue));
 		}
 
 		$agenda_parts = $xpath->query(".//div[@class='ai1ec-btn-group ai1ec-actions']/a",$agenda_item);
@@ -72,7 +71,7 @@ function get_blog_items($amount = 50) {
     $filters['showposts'] = $amount;
     $posts = get_posts($filters);
     foreach($posts as $post) {
-	$post_list[] = array('id' => $post->ID, 'timestamp' => strtotime($post->post_date) ,'title' => $post->post_title, 'link' => get_permalink($post->ID),'date' => $post->post_date , 'author' => get_the_author_meta('display_name', $post->post_author ));
+	$post_list[] = array('id' => $post->ID, 'timestamp' => strtotime($post->post_date) ,'title' => $post->post_title, 'link' => get_permalink($post->ID),'author' => get_the_author_meta('display_name', $post->post_author ));
     }
     return $post_list;
 }

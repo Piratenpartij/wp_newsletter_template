@@ -28,7 +28,7 @@ jQuery( document ).ready(function() {
 <div class="iframe">
 <?php
 foreach (get_blog_items() as $blog_item) {
-  $controls->checkbox_group('theme_blog_items',$blog_item['id'],$blog_item['date'] . ' - ' . $blog_item['title'] . ' (<em>' . $blog_item['author'] . '</em>)');
+  $controls->checkbox_group('theme_blog_items',$blog_item['id'],strftime('%e %B %Y',$blog_item['timestamp']) . ' - ' . $blog_item['title'] . ' (<em>' . $blog_item['author'] . '</em>)');
   echo '<br />';
 }
 ?>
@@ -38,7 +38,7 @@ foreach (get_blog_items() as $blog_item) {
 <div class="iframe">
 <?php
 foreach (get_agenda_items() as $agenda_item) {
-  $controls->checkbox_group('theme_agenda_items',$agenda_item['id'],$agenda_item['date'] . ' - ' . $agenda_item['title']);
+  $controls->checkbox_group('theme_agenda_items',$agenda_item['id'],strftime('%e %B %Y, %H:%M',$agenda_item['timestamp']) . ' - ' . $agenda_item['title']);
   echo '<br />';
 }
 ?>

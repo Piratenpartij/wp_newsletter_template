@@ -131,12 +131,13 @@ require_once('theme-functions.inc.php');
 					echo '<a href="/wp-admin/post.php?post=' . $post->ID . '&action=edit" target="_blank">Bewerken in nieuw venster</a>';
 				} ?>
                                 <p>
-<?php
-// Remove extra enters between HTML tags
-$re = "/(ul|li)>\\s*<br \\/>\\s*\\</";
-$subst = "$1><";
-echo preg_replace($re, $subst, nl2br($post->post_content));
-?></p>
+                                <?php
+                                  // Remove extra enters between HTML tags
+                                  $re = "/(ul|li)>\\s*<br \\/>\\s*\\</";
+                                  $subst = "$1><";
+                                  echo preg_replace($re, $subst, nl2br($post->post_content));
+                                ?>
+                               </p>
                         </td>
                         <?php if ($theme_options['theme_thumbnails_location'] == 'r') { ?>
                           <td valign="top">
@@ -160,7 +161,7 @@ echo preg_replace($re, $subst, nl2br($post->post_content));
                     <?php
                         foreach (get_blog_items() as $blog_item) {
                             if (!in_array($blog_item['id'],$theme_options['theme_blog_items'])) continue;
-			    echo '<strong><a href="' . $blog_item['link'] . '" target="_blank" title="' . $blog_item['title'] . '">' . $blog_item['title'] . '</a></strong><br />Geschreven door: ' . $blog_item['author'] . ' op ' . strtolower(date('j F Y',$blog_item['timestamp'])) . '<br /><br />';
+			    echo '<strong><a href="' . $blog_item['link'] . '" target="_blank" title="' . $blog_item['title'] . '">' . $blog_item['title'] . '</a></strong><br />Geschreven door: ' . $blog_item['author'] . ' op ' . strftime('%e %B %Y',$blog_item['timestamp']) . '<br /><br />';
                         }?>
                 </td>
                 <?php if ($theme_options['theme_thumbnails_location'] == 'r') { ?>
@@ -180,7 +181,7 @@ echo preg_replace($re, $subst, nl2br($post->post_content));
                     <?php
 			foreach (get_agenda_items() as $agenda_item) {
 			    if (!in_array($agenda_item['id'],$theme_options['theme_agenda_items'])) continue;
-			    echo '<tr><td style="white-space: nowrap"><strong>' . strtolower(date('j F Y, H:i',$agenda_item['timestamp'])) . '</strong></td><td><a href="' . $agenda_item['link'] . '" target="_blank" title="' . $agenda_item['title'] . '">' . $agenda_item['title'] . '</a></td></tr>';
+			    echo '<tr><td style="white-space: nowrap"><strong>' . strftime('%e %B %Y, %H:%M',$agenda_item['timestamp']) . '</strong></td><td><a href="' . $agenda_item['link'] . '" target="_blank" title="' . $agenda_item['title'] . '">' . $agenda_item['title'] . '</a></td></tr>';
 			}?>
 		    </table>
                 </td>
